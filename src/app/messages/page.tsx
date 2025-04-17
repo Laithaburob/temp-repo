@@ -106,7 +106,6 @@ interface Communication {
   eventDate?: string;
 }
 
-// Fixed type definition for user profile to match the object
 interface UserProfile {
   id: string;
   name: string;
@@ -459,35 +458,38 @@ export default function Messages() {
   const handleAddComment = (commId: string) => {
     if (!newComment.trim()) return;
     
-    setCommunications(communications.map(comm => {
-      if (comm.id === commId) {
-        const newCommentObj: Comment = {
-          id: `co${comm.comments.length + 1}`,
-          sender: {
-            id: userProfile.id,
-            name: userProfile.name,
-            avatar: userProfile.avatar,
-            role: userProfile.role,
-          },
-          content: newComment,
-          timestamp: new Date().toISOString(),
-        };
-        return {
-          ...comm,
-          comments: [...comm.comments, newCommentObj]
-        };
-      }
-      return comm;
-    }));
+    setCommunications(prevCommunications => 
+      prevCommunications.map(comm => {
+        if (comm.id === commId) {
+          const newCommentObj: Comment = {
+            id: `co${comm.comments ? comm.comments.length + 1 : 1}`,
+            sender: {
+              id: userProfile.id,
+              name: userProfile.name,
+              avatar: userProfile.avatar || null,
+              role: userProfile.role,
+            },
+            content: newComment,
+            timestamp: new Date().toISOString(),
+          };
+          return {
+            ...comm,
+            comments: comm.comments ? [...comm.comments, newCommentObj] : [newCommentObj]
+          };
+        }
+        return comm;
+      })
+    );
     
     setNewComment("");
   };
 
   const getActiveCommunication = () => {
-    return communications.find(comm => comm.id === activeCommunication);
+    return communications.find(comm => comm.id === activeCommunication) || null;
   };
 
-  const formatTimestamp = (timestamp: string) => {
+  const formatTimestamp = (timestamp?: string) => {
+    if (!timestamp) return '';
     const date = new Date(timestamp);
     const now = new Date();
     const diffInDays = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60 * 24));
@@ -504,7 +506,8 @@ export default function Messages() {
     }
   };
 
-  const formatDate = (timestamp: string) => {
+  const formatDate = (timestamp?: string) => {
+    if (!timestamp) return '';
     const date = new Date(timestamp);
     return date.toLocaleDateString('en-US', {
       weekday: 'short',
@@ -514,7 +517,7 @@ export default function Messages() {
     });
   };
 
-  const getCommunicationTypeIcon = (type: string) => {
+  const getCommunicationTypeIcon = (type?: string) => {
     switch (type) {
       case "assignment":
         return <FileText className="h-5 w-5 text-red-500" />;
@@ -531,7 +534,7 @@ export default function Messages() {
     }
   };
 
-  const getTypeBadgeColor = (type: string | undefined) => {
+  const getTypeBadgeColor = (type?: string) => {
     switch (type) {
       case "assignment":
         return "bg-red-500/10 text-red-500 border-red-500/30";
