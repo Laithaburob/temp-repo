@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -102,6 +103,20 @@ interface Communication {
   dueDate?: string;
   status?: string;
   eventDate?: string;
+}
+
+// Fixed type definition for user profile to match the object
+interface UserProfile {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  department: string;
+  avatar: string | null;
+  courses: Array<{
+    id: string;
+    name: string;
+  }>;
 }
 
 const communicationsData: Communication[] = [
@@ -254,7 +269,7 @@ const communicationsData: Communication[] = [
   }
 ];
 
-const userProfile = {
+const userProfile: UserProfile = {
   id: "student001",
   name: "Alex Johnson",
   email: "alex.johnson@university.edu",
@@ -330,6 +345,16 @@ const contacts = [
   },
 ];
 
+interface Contact {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  department: string;
+  avatar: string | null;
+  members?: number;
+}
+
 export default function Messages() {
   const [activeType, setActiveType] = useState("all");
   const [activeCommunication, setActiveCommunication] = useState<string | null>(null);
@@ -343,7 +368,7 @@ export default function Messages() {
   const [composeRecipient, setComposeRecipient] = useState("");
   const [composeCourse, setComposeCourse] = useState("");
   const [composeDueDate, setComposeDueDate] = useState("");
-  const [attachments, setAttachments] = useState<any[]>([]);
+  const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [newComment, setNewComment] = useState("");
   const contentRef = useRef<HTMLDivElement>(null);
   
@@ -397,6 +422,7 @@ export default function Messages() {
       comments: [],
       ...(composeType === "assignment" && { dueDate: composeDueDate }),
       ...(composeType === "assignment" && { status: "pending" }),
+      ...(composeType === "announcement" && { eventDate: "" }),
     };
     
     setCommunications([...communications, newCommunication]);
@@ -434,9 +460,14 @@ export default function Messages() {
     
     setCommunications(communications.map(comm => {
       if (comm.id === commId) {
-        const newCommentObj = {
+        const newCommentObj: Comment = {
           id: `co${comm.comments.length + 1}`,
-          sender: userProfile,
+          sender: {
+            id: userProfile.id,
+            name: userProfile.name,
+            avatar: userProfile.avatar,
+            role: userProfile.role,
+          },
           content: newComment,
           timestamp: new Date().toISOString(),
         };
@@ -877,7 +908,12 @@ export default function Messages() {
                   <Button 
                     variant="ghost" 
                     size="icon"
-                    onClick={() => handleToggleStar(activeCommunication)}
+                    onClick={() => {
+                      const activeCommunicationObj = getActiveCommunication();
+                      if (activeCommunicationObj) {
+                        handleToggleStar(activeCommunicationObj.id);
+                      }
+                    }}
                     title={getActiveCommunication()?.isStarred ? "Unstar" : "Star"}
                   >
                     <Star className={`h-4 w-4 ${getActiveCommunication()?.isStarred ? 'fill-yellow-400 text-yellow-400' : ''}`} />
@@ -886,7 +922,11 @@ export default function Messages() {
                   <Button 
                     variant="ghost" 
                     size="icon"
-                    onClick={() => handleDeleteCommunication(activeCommunication)}
+                    onClick={() => {
+                      if (activeCommunication) {
+                        handleDeleteCommunication(activeCommunication);
+                      }
+                    }}
                     title="Delete"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -936,12 +976,14 @@ export default function Messages() {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <h1 className="text-2xl font-bold">{getActiveCommunication()?.title}</h1>
-                      <Badge 
-                        variant="outline" 
-                        className={`${getTypeBadgeColor(getActiveCommunication()?.type || "")}`}
-                      >
-                        {getActiveCommunication()?.type.charAt(0).toUpperCase() + getActiveCommunication()?.type.slice(1)}
-                      </Badge>
+                      {getActiveCommunication()?.type && (
+                        <Badge 
+                          variant="outline" 
+                          className={getTypeBadgeColor(getActiveCommunication()?.type)}
+                        >
+                          {getActiveCommunication()?.type.charAt(0).toUpperCase() + getActiveCommunication()?.type.slice(1)}
+                        </Badge>
+                      )}
                     </div>
                     
                     <div className="text-sm text-muted-foreground">
@@ -949,7 +991,7 @@ export default function Messages() {
                       {getActiveCommunication()?.type === "assignment" && getActiveCommunication()?.dueDate && (
                         <span className="ml-4 flex items-center gap-1 inline-flex">
                           <Calendar className="h-4 w-4" />
-                          Due: {formatDate(getActiveCommunication()?.dueDate || "")}
+                          Due: {getActiveCommunication()?.dueDate ? formatDate(getActiveCommunication().dueDate) : ""}
                         </span>
                       )}
                     </div>
@@ -966,9 +1008,11 @@ export default function Messages() {
                         {getActiveCommunication()?.sender.role === "Professor" && (
                           <Badge className="bg-[#45f0df]/20 text-[#45f0df]">Professor</Badge>
                         )}
-                        <span className="text-sm text-muted-foreground">
-                          {formatDate(getActiveCommunication()?.timestamp || "")} at {new Date(getActiveCommunication()?.timestamp || "").toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-                        </span>
+                        {getActiveCommunication()?.timestamp && (
+                          <span className="text-sm text-muted-foreground">
+                            {formatDate(getActiveCommunication().timestamp)} at {new Date(getActiveCommunication().timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -1001,7 +1045,11 @@ export default function Messages() {
                                     ? "Graded"
                                     : "Pending"}
                               </Badge>
-                              <span className="text-sm text-muted-foreground">Submission deadline: {formatDate(getActiveCommunication()?.dueDate || "")}</span>
+                              {getActiveCommunication()?.dueDate && (
+                                <span className="text-sm text-muted-foreground">
+                                  Submission deadline: {formatDate(getActiveCommunication().dueDate)}
+                                </span>
+                              )}
                             </div>
                             
                             <Button size="sm" className="bg-[#45f0df] text-primary hover:bg-[#32d8c8]">
@@ -1095,7 +1143,11 @@ export default function Messages() {
                         />
                         
                         <Button 
-                          onClick={() => handleAddComment(activeCommunication)}
+                          onClick={() => {
+                            if (activeCommunication) {
+                              handleAddComment(activeCommunication);
+                            }
+                          }}
                           disabled={!newComment.trim()}
                           className="bg-[#45f0df] text-primary hover:bg-[#32d8c8]"
                         >

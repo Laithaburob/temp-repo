@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -829,4 +830,14 @@ export default function CalendarPage() {
               {(activeView === 'week' || activeView === 'day') && (
                 <div className="text-center py-12">
                   <CalendarIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-                  <h3 className="mt-4 text
+                  <h3 className="mt-4 text-lg font-semibold">Coming soon</h3>
+                  <p className="text-muted-foreground mt-2">Week and day views are under development.</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}
