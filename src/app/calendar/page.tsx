@@ -110,8 +110,8 @@ const calendarEvents = [
     id: "evt004",
     title: "Study Group Session",
     description: "Machine Learning midterm preparation",
-    startTime: new Date(new Date().setDate(new Date().getDate() + 2)).setHours(14, 0, 0, 0).toISOString(),
-    endTime: new Date(new Date().setDate(new Date().getDate() + 2)).setHours(16, 0, 0, 0).toISOString(),
+    startTime: new Date(new Date(new Date().setDate(new Date().getDate() + 2)).setHours(14, 0, 0, 0)).toISOString(),
+    endTime: new Date(new Date(new Date().setDate(new Date().getDate() + 2)).setHours(16, 0, 0, 0)).toISOString(),
     location: "Library, Study Room 3",
     type: "personal",
     participants: [
@@ -137,8 +137,8 @@ const calendarEvents = [
     id: "evt005",
     title: "Neural Networks Practical Exam",
     description: "Hands-on practical examination on neural network implementations",
-    startTime: new Date(new Date().setDate(new Date().getDate() + 21)).setHours(13, 0, 0, 0).toISOString(),
-    endTime: new Date(new Date().setDate(new Date().getDate() + 21)).setHours(15, 0, 0, 0).toISOString(),
+    startTime: new Date(new Date(new Date().setDate(new Date().getDate() + 21)).setHours(13, 0, 0, 0)).toISOString(),
+    endTime: new Date(new Date(new Date().setDate(new Date().getDate() + 21)).setHours(15, 0, 0, 0)).toISOString(),
     location: "Computing Center, Lab 3",
     type: "exam",
     course: {
@@ -152,8 +152,8 @@ const calendarEvents = [
     id: "evt006",
     title: "Virtual Study Session",
     description: "Optional study session for Machine Learning assignment",
-    startTime: new Date(new Date().setDate(new Date().getDate() + 1)).setHours(16, 0, 0, 0).toISOString(),
-    endTime: new Date(new Date().setDate(new Date().getDate() + 1)).setHours(17, 0, 0, 0).toISOString(),
+    startTime: new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(16, 0, 0, 0)).toISOString(),
+    endTime: new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(17, 0, 0, 0)).toISOString(),
     type: "class",
     isVirtual: true,
     meetingUrl: "https://university.zoom.us/j/123456789",
@@ -187,8 +187,8 @@ const calendarEvents = [
     id: "evt008",
     title: "University Career Fair",
     description: "Annual career fair with tech industry representatives",
-    startTime: new Date(new Date().setDate(new Date().getDate() + 14)).setHours(10, 0, 0, 0).toISOString(),
-    endTime: new Date(new Date().setDate(new Date().getDate() + 14)).setHours(16, 0, 0, 0).toISOString(),
+    startTime: new Date(new Date(new Date().setDate(new Date().getDate() + 14)).setHours(10, 0, 0, 0)).toISOString(),
+    endTime: new Date(new Date(new Date().setDate(new Date().getDate() + 14)).setHours(16, 0, 0, 0)).toISOString(),
     location: "Student Union Building, Main Hall",
     type: "institution",
     color: "#10b981" // emerald-500
@@ -829,14 +829,4 @@ export default function CalendarPage() {
               {(activeView === 'week' || activeView === 'day') && (
                 <div className="text-center py-12">
                   <CalendarIcon className="mx-auto h-12 w-12 text-muted-foreground" />
-                  <h3 className="mt-4 text-lg font-semibold">View Coming Soon</h3>
-                  <p className="text-muted-foreground mt-2">This view is under development.</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
-} 
+                  <h3 className="mt-4 text

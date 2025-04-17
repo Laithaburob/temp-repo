@@ -61,8 +61,50 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 
-// Mock communications data
-const communicationsData = [
+interface Comment {
+  id: string;
+  sender: {
+    id: string;
+    name: string;
+    avatar: string | null;
+    role: string;
+  };
+  content: string;
+  timestamp: string;
+}
+
+interface Attachment {
+  id: number;
+  name: string;
+  type: string;
+  size: string;
+}
+
+interface Communication {
+  id: string;
+  type: string;
+  title: string;
+  sender: {
+    id: string;
+    name: string;
+    avatar: string | null;
+    role: string;
+    department: string;
+  };
+  content: string;
+  timestamp: string;
+  isRead: boolean;
+  isStarred: boolean;
+  isPinned: boolean;
+  course: string;
+  attachments: Attachment[];
+  comments: Comment[];
+  dueDate?: string;
+  status?: string;
+  eventDate?: string;
+}
+
+const communicationsData: Communication[] = [
   {
     id: "c001",
     type: "assignment",
@@ -81,7 +123,7 @@ const communicationsData = [
     isPinned: true,
     course: "Machine Learning 101",
     dueDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
-    status: "pending", // pending, submitted, graded
+    status: "pending",
     attachments: [
       {
         id: 1,
@@ -212,7 +254,6 @@ const communicationsData = [
   }
 ];
 
-// User profile mock data
 const userProfile = {
   id: "student001",
   name: "Alex Johnson",
@@ -227,7 +268,6 @@ const userProfile = {
   ]
 };
 
-// Communication types and categories
 const communicationTypes = [
   { id: "all", name: "All", icon: <MessageSquare className="h-4 w-4" /> },
   { id: "assignment", name: "Assignments", icon: <FileText className="h-4 w-4" /> },
@@ -238,7 +278,6 @@ const communicationTypes = [
   { id: "starred", name: "Starred", icon: <Star className="h-4 w-4" /> }
 ];
 
-// Mock contacts (professors, students, classes)
 const contacts = [
   {
     id: "prof001",
@@ -295,8 +334,8 @@ export default function Messages() {
   const [activeType, setActiveType] = useState("all");
   const [activeCommunication, setActiveCommunication] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [communications, setCommunications] = useState(communicationsData);
-  const [filteredCommunications, setFilteredCommunications] = useState(communicationsData);
+  const [communications, setCommunications] = useState<Communication[]>(communicationsData);
+  const [filteredCommunications, setFilteredCommunications] = useState<Communication[]>(communicationsData);
   const [showComposeDialog, setShowComposeDialog] = useState(false);
   const [composeType, setComposeType] = useState("message");
   const [composeTitle, setComposeTitle] = useState("");
@@ -308,18 +347,15 @@ export default function Messages() {
   const [newComment, setNewComment] = useState("");
   const contentRef = useRef<HTMLDivElement>(null);
   
-  // Filter communications based on search query and active type
   useEffect(() => {
     let filtered = communications;
     
-    // Filter by type
     if (activeType === "starred") {
       filtered = filtered.filter(comm => comm.isStarred);
     } else if (activeType !== "all") {
       filtered = filtered.filter(comm => comm.type === activeType);
     }
     
-    // Filter by search query
     if (searchQuery) {
       filtered = filtered.filter(comm => 
         comm.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -331,7 +367,6 @@ export default function Messages() {
     setFilteredCommunications(filtered);
   }, [searchQuery, communications, activeType]);
 
-  // Scroll to top of content when viewing a new communication
   useEffect(() => {
     if (activeCommunication && contentRef.current) {
       contentRef.current.scrollTop = 0;
@@ -341,21 +376,27 @@ export default function Messages() {
   const handleCreateCommunication = () => {
     if (!composeTitle.trim() || !composeContent.trim() || !composeRecipient) return;
     
-    const newCommunication = {
+    const newCommunication: Communication = {
       id: `c${communications.length + 1}`,
       type: composeType,
       title: composeTitle,
-      sender: userProfile,
+      sender: {
+        id: userProfile.id,
+        name: userProfile.name,
+        avatar: userProfile.avatar,
+        role: userProfile.role,
+        department: userProfile.department,
+      },
       content: composeContent,
       timestamp: new Date().toISOString(),
       isRead: true,
       isStarred: false,
       isPinned: false,
       course: composeCourse || "General",
-      dueDate: composeType === "assignment" ? composeDueDate : undefined,
-      status: composeType === "assignment" ? "pending" : undefined,
       attachments: attachments,
       comments: [],
+      ...(composeType === "assignment" && { dueDate: composeDueDate }),
+      ...(composeType === "assignment" && { status: "pending" }),
     };
     
     setCommunications([...communications, newCommunication]);
@@ -410,12 +451,10 @@ export default function Messages() {
     setNewComment("");
   };
 
-  // Function to get the active communication
   const getActiveCommunication = () => {
     return communications.find(comm => comm.id === activeCommunication);
   };
 
-  // Function to format timestamp
   const formatTimestamp = (timestamp: string) => {
     const date = new Date(timestamp);
     const now = new Date();
@@ -433,7 +472,6 @@ export default function Messages() {
     }
   };
 
-  // Function to format date
   const formatDate = (timestamp: string) => {
     const date = new Date(timestamp);
     return date.toLocaleDateString('en-US', {
@@ -444,7 +482,6 @@ export default function Messages() {
     });
   };
 
-  // Function to get communication type icon
   const getCommunicationTypeIcon = (type: string) => {
     switch (type) {
       case "assignment":
@@ -462,7 +499,6 @@ export default function Messages() {
     }
   };
 
-  // Function to get badge color by type
   const getTypeBadgeColor = (type: string) => {
     switch (type) {
       case "assignment":
@@ -482,7 +518,6 @@ export default function Messages() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
-      {/* Header */}
       <header className="px-6 py-3 border-b border-border flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Button variant="ghost" size="icon" asChild>
@@ -502,9 +537,7 @@ export default function Messages() {
       </header>
       
       <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar - Navigation */}
         <div className="w-64 border-r border-border flex flex-col overflow-hidden">
-          {/* Compose button */}
           <div className="p-4">
             <Dialog open={showComposeDialog} onOpenChange={setShowComposeDialog}>
               <DialogTrigger asChild>
@@ -652,7 +685,6 @@ export default function Messages() {
             </Dialog>
           </div>
           
-          {/* Communication Types */}
           <div className="px-3 py-2">
             <h2 className="text-xs font-semibold text-muted-foreground mb-2 px-2">COMMUNICATION</h2>
             <nav className="space-y-1">
@@ -681,7 +713,6 @@ export default function Messages() {
             </nav>
           </div>
           
-          {/* Courses */}
           <div className="px-3 py-2 border-t border-border mt-2">
             <h2 className="text-xs font-semibold text-muted-foreground mb-2 px-2">COURSES</h2>
             <div className="space-y-1">
@@ -697,7 +728,6 @@ export default function Messages() {
             </div>
           </div>
           
-          {/* User profile */}
           <div className="mt-auto p-3 border-t border-border">
             <div className="flex items-center gap-2">
               <Avatar className="h-8 w-8">
@@ -711,9 +741,7 @@ export default function Messages() {
           </div>
         </div>
         
-        {/* Communication List */}
         <div className={`${activeCommunication ? 'hidden md:block' : ''} w-full md:w-1/3 border-r border-border flex flex-col overflow-hidden`}>
-          {/* Search */}
           <div className="p-3 border-b border-border">
             <div className="relative">
               <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -726,7 +754,6 @@ export default function Messages() {
             </div>
           </div>
           
-          {/* Communication list */}
           <div className="flex-1 overflow-y-auto">
             {filteredCommunications.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-4">
@@ -832,11 +859,9 @@ export default function Messages() {
           </div>
         </div>
         
-        {/* Communication Content */}
         <div className={`${activeCommunication ? 'flex' : 'hidden md:flex'} flex-1 flex-col overflow-hidden`}>
           {activeCommunication ? (
             <>
-              {/* Content header */}
               <div className="p-3 border-b border-border flex items-center justify-between">
                 <div className="flex items-center gap-2 md:hidden">
                   <Button 
@@ -906,10 +931,8 @@ export default function Messages() {
                 )}
               </div>
               
-              {/* Content */}
               <div className="flex-1 overflow-y-auto p-4" ref={contentRef}>
                 <div className="max-w-3xl mx-auto space-y-6">
-                  {/* Header info */}
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <h1 className="text-2xl font-bold">{getActiveCommunication()?.title}</h1>
@@ -926,13 +949,12 @@ export default function Messages() {
                       {getActiveCommunication()?.type === "assignment" && getActiveCommunication()?.dueDate && (
                         <span className="ml-4 flex items-center gap-1 inline-flex">
                           <Calendar className="h-4 w-4" />
-                          Due: {formatDate(getActiveCommunication()?.dueDate)}
+                          Due: {formatDate(getActiveCommunication()?.dueDate || "")}
                         </span>
                       )}
                     </div>
                   </div>
                   
-                  {/* Sender info */}
                   <div className="flex items-start gap-3">
                     <Avatar className="h-10 w-10">
                       <AvatarFallback>{getActiveCommunication()?.sender.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
@@ -951,14 +973,12 @@ export default function Messages() {
                     </div>
                   </div>
                   
-                  {/* Content */}
                   <div className="prose prose-sm max-w-none dark:prose-invert">
                     {getActiveCommunication()?.content.split('\n').map((paragraph, i) => (
                       <p key={i}>{paragraph}</p>
                     ))}
                   </div>
                   
-                  {/* Assignment status (if applicable) */}
                   {getActiveCommunication()?.type === "assignment" && (
                     <Card className="mt-6">
                       <CardHeader className="pb-2">
@@ -996,7 +1016,6 @@ export default function Messages() {
                     </Card>
                   )}
                   
-                  {/* Attachments */}
                   {getActiveCommunication()?.attachments && getActiveCommunication()?.attachments.length > 0 && (
                     <div className="border border-border rounded-md p-4">
                       <h3 className="text-sm font-medium mb-3">Attachments</h3>
@@ -1025,7 +1044,6 @@ export default function Messages() {
                     </div>
                   )}
                   
-                  {/* Comments */}
                   <div className="border-t border-border pt-6 mt-6">
                     <h3 className="text-sm font-medium mb-3">Comments ({getActiveCommunication()?.comments.length || 0})</h3>
                     
@@ -1063,7 +1081,6 @@ export default function Messages() {
                       <p className="text-sm text-muted-foreground mb-4">No comments yet. Be the first to comment!</p>
                     )}
                     
-                    {/* Add comment */}
                     <div className="flex gap-3">
                       <Avatar className="h-8 w-8">
                         <AvatarFallback>{userProfile.name.split(" ").map(n => n[0]).join("")}</AvatarFallback>
@@ -1112,4 +1129,4 @@ export default function Messages() {
       </div>
     </div>
   );
-} 
+}

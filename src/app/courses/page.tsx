@@ -5,31 +5,36 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { 
   BookOpen, 
+  Calendar, 
   Clock, 
-  Calendar,
-  Video,
-  Users,
-  Search,
-  Filter,
-  ChevronRight,
+  Users, 
+  Star, 
+  BarChart, 
+  FileText, 
+  CheckCircle, 
+  AlertCircle, 
+  ChevronRight, 
+  ChevronDown, 
+  Search, 
+  Filter, 
+  Plus, 
+  MoreHorizontal, 
+  ExternalLink, 
+  Download, 
+  Upload, 
+  Video, 
+  MessageSquare, 
+  Bell,
   Bookmark,
-  Star,
-  Plus,
-  MoreHorizontal,
-  CheckCircle,
-  PenLine,
-  FileText,
-  GraduationCap,
-  ArrowUpRight,
-  Tag
+  PenLine
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,7 +52,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 
 // Mock data for courses
 const coursesData = [
@@ -55,232 +60,260 @@ const coursesData = [
     id: "course001",
     code: "CS101",
     title: "Introduction to Computer Science",
-    department: "Computer Science",
-    description: "A comprehensive introduction to computer science principles, algorithms, and programming fundamentals.",
+    description: "Fundamental concepts of programming and computer science. Learn about algorithms, data structures, and basic programming in Python.",
     instructor: {
       id: "prof001",
       name: "Dr. Sarah Chen",
       avatar: "/avatar-1.jpg",
       department: "Computer Science"
     },
-    term: "Fall 2023",
-    progress: 78,
-    status: "active",
-    creditHours: 3,
-    enrollmentDate: "2023-09-05",
-    meetingTimes: [
-      { day: "Monday", startTime: "10:00 AM", endTime: "11:30 AM", location: "Science Building, Room 305" },
-      { day: "Wednesday", startTime: "10:00 AM", endTime: "11:30 AM", location: "Science Building, Room 305" }
+    schedule: [
+      { day: "Monday", startTime: "10:00 AM", endTime: "11:30 AM", location: "Science Building, Room 101" },
+      { day: "Wednesday", startTime: "10:00 AM", endTime: "11:30 AM", location: "Science Building, Room 101" }
     ],
+    enrollmentStatus: "enrolled", // enrolled, completed, dropped, waitlisted
+    progress: 35,
+    credits: 3,
+    term: "Fall 2023",
+    startDate: "2023-09-05",
+    endDate: "2023-12-15",
+    color: "#4f46e5", // indigo-600
     nextAssignment: {
-      id: "asn001",
-      title: "Algorithm Analysis Project",
-      dueDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 3).toISOString(),
-      status: "pending"
+      id: "assign001",
+      title: "Python Basics Quiz",
+      dueDate: "2023-10-15T23:59:00Z",
+      type: "quiz"
     },
-    upcomingExam: {
-      id: "exm002",
-      title: "Midterm Examination",
-      date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14).toISOString(),
-      location: "Main Hall, Room 201"
-    },
-    tags: ["Required", "Core", "Beginner"],
-    thumbnail: "/course-cs101.jpg"
+    upcomingLecture: {
+      id: "lect001",
+      title: "Variables and Data Types",
+      date: "2023-10-10T10:00:00Z",
+      location: "Science Building, Room 101"
+    }
   },
   {
     id: "course002",
     code: "ML404",
     title: "Machine Learning & Neural Networks",
-    department: "Computer Science",
-    description: "Advanced study of machine learning techniques, neural network architectures, and deep learning frameworks.",
+    description: "Advanced course covering machine learning algorithms, neural network architectures, and practical applications in data science.",
     instructor: {
       id: "prof002",
       name: "Dr. Michael Foster",
       avatar: "/avatar-4.jpg",
       department: "Computer Science"
     },
-    term: "Fall 2023",
-    progress: 45,
-    status: "active",
-    creditHours: 4,
-    enrollmentDate: "2023-09-05",
-    meetingTimes: [
-      { day: "Tuesday", startTime: "1:00 PM", endTime: "2:50 PM", location: "AI Lab, Tech Building" },
-      { day: "Thursday", startTime: "1:00 PM", endTime: "2:50 PM", location: "AI Lab, Tech Building" }
+    schedule: [
+      { day: "Tuesday", startTime: "2:00 PM", endTime: "3:30 PM", location: "Engineering Building, Room 305" },
+      { day: "Thursday", startTime: "2:00 PM", endTime: "3:30 PM", location: "Engineering Building, Room 305" }
     ],
+    enrollmentStatus: "enrolled",
+    progress: 42,
+    credits: 4,
+    term: "Fall 2023",
+    startDate: "2023-09-05",
+    endDate: "2023-12-15",
+    color: "#0ea5e9", // sky-500
     nextAssignment: {
-      id: "asn005",
-      title: "Neural Network Implementation",
-      dueDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 5).toISOString(),
-      status: "pending"
+      id: "assign002",
+      title: "Neural Network Architectures Assignment",
+      dueDate: "2023-10-20T23:59:00Z",
+      type: "assignment"
     },
-    upcomingExam: {
-      id: "exm006",
-      title: "Neural Networks Practical Exam",
-      date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 21).toISOString(),
-      location: "Computing Center, Lab 3"
-    },
-    tags: ["Elective", "Advanced", "Practical"],
-    thumbnail: "/course-ml404.jpg"
+    upcomingLecture: {
+      id: "lect002",
+      title: "Convolutional Neural Networks",
+      date: "2023-10-12T14:00:00Z",
+      location: "Engineering Building, Room 305"
+    }
   },
   {
     id: "course003",
     code: "ENG210",
     title: "Technical Writing for STEM",
-    department: "English",
-    description: "Develops technical writing skills specifically for science, technology, engineering, and mathematics disciplines.",
+    description: "Develop professional writing skills for technical and scientific contexts. Focus on clarity, precision, and effective communication.",
     instructor: {
       id: "prof003",
-      name: "Prof. Elizabeth Warren",
-      avatar: "/avatar-5.jpg",
+      name: "Dr. Lisa Johnson",
+      avatar: "/avatar-7.jpg",
       department: "English"
     },
-    term: "Fall 2023",
-    progress: 62,
-    status: "active",
-    creditHours: 3,
-    enrollmentDate: "2023-09-05",
-    meetingTimes: [
-      { day: "Monday", startTime: "2:00 PM", endTime: "3:30 PM", location: "Liberal Arts Building, Room 142" },
-      { day: "Friday", startTime: "2:00 PM", endTime: "3:30 PM", location: "Liberal Arts Building, Room 142" }
+    schedule: [
+      { day: "Friday", startTime: "1:00 PM", endTime: "3:00 PM", location: "Humanities Building, Room 210" }
     ],
+    enrollmentStatus: "enrolled",
+    progress: 65,
+    credits: 2,
+    term: "Fall 2023",
+    startDate: "2023-09-05",
+    endDate: "2023-12-15",
+    color: "#f97316", // orange-500
     nextAssignment: {
-      id: "asn007",
-      title: "Research Paper - First Draft",
-      dueDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7).toISOString(),
-      status: "pending"
+      id: "assign003",
+      title: "Research Paper First Draft",
+      dueDate: "2023-10-18T23:59:00Z",
+      type: "paper"
     },
-    upcomingExam: null,
-    tags: ["Required", "General Education", "Writing Intensive"],
-    thumbnail: "/course-eng210.jpg"
+    upcomingLecture: {
+      id: "lect003",
+      title: "Technical Documentation Standards",
+      date: "2023-10-13T13:00:00Z",
+      location: "Humanities Building, Room 210"
+    }
   },
   {
     id: "course004",
     code: "PHYS202",
     title: "Modern Physics",
-    department: "Physics",
-    description: "Introduction to quantum mechanics, relativity, and nuclear physics with applications to modern technologies.",
+    description: "Introduction to quantum mechanics, relativity, and nuclear physics. Explore the fundamental laws that govern the universe at both cosmic and subatomic scales.",
     instructor: {
       id: "prof004",
       name: "Dr. Robert Thompson",
       avatar: "/avatar-6.jpg",
       department: "Physics"
     },
-    term: "Fall 2023",
-    progress: 35,
-    status: "active",
-    creditHours: 4,
-    enrollmentDate: "2023-09-05",
-    meetingTimes: [
-      { day: "Tuesday", startTime: "9:00 AM", endTime: "10:50 AM", location: "Physics Building, Room 112" },
-      { day: "Thursday", startTime: "9:00 AM", endTime: "10:50 AM", location: "Physics Building, Room 112" },
-      { day: "Wednesday", startTime: "3:00 PM", endTime: "4:50 PM", location: "Physics Lab, Room 22" }
+    schedule: [
+      { day: "Monday", startTime: "3:00 PM", endTime: "4:30 PM", location: "Science Building, Room 205" },
+      { day: "Wednesday", startTime: "3:00 PM", endTime: "4:30 PM", location: "Science Building, Room 205" },
+      { day: "Thursday", startTime: "3:00 PM", endTime: "4:50 PM", location: "Physics Lab, Room 22" }
     ],
+    enrollmentStatus: "enrolled",
+    progress: 28,
+    credits: 4,
+    term: "Fall 2023",
+    startDate: "2023-09-05",
+    endDate: "2023-12-15",
+    color: "#ef4444", // red-500
     nextAssignment: {
-      id: "asn009",
+      id: "assign004",
       title: "Quantum Mechanics Problem Set",
-      dueDate: new Date(Date.now() + 1000 * 60 * 60 * 24 * 6).toISOString(),
-      status: "pending"
+      dueDate: "2023-10-17T23:59:00Z",
+      type: "problem-set"
     },
-    upcomingExam: {
-      id: "exm010",
-      title: "Relativity Quiz",
-      date: new Date(Date.now() + 1000 * 60 * 60 * 24 * 10).toISOString(),
-      location: "Physics Building, Room 112"
+    upcomingLecture: {
+      id: "lect004",
+      title: "Wave-Particle Duality",
+      date: "2023-10-11T15:00:00Z",
+      location: "Science Building, Room 205"
+    }
+  },
+  {
+    id: "course005",
+    code: "MATH301",
+    title: "Linear Algebra",
+    description: "Study of vector spaces, linear transformations, matrices, and systems of linear equations. Applications in computer graphics, data analysis, and physics.",
+    instructor: {
+      id: "prof005",
+      name: "Dr. Emily Wilson",
+      avatar: "/avatar-8.jpg",
+      department: "Mathematics"
     },
-    tags: ["Required", "Lab Component", "Intermediate"],
-    thumbnail: "/course-phys202.jpg"
+    schedule: [
+      { day: "Tuesday", startTime: "11:00 AM", endTime: "12:30 PM", location: "Mathematics Building, Room 103" },
+      { day: "Thursday", startTime: "11:00 AM", endTime: "12:30 PM", location: "Mathematics Building, Room 103" }
+    ],
+    enrollmentStatus: "completed",
+    progress: 100,
+    grade: "A",
+    credits: 3,
+    term: "Spring 2023",
+    startDate: "2023-01-17",
+    endDate: "2023-05-12",
+    color: "#10b981", // emerald-500
   }
 ];
 
-// Departments for filtering
+// Assignment types
+const assignmentTypes = [
+  { id: "assignment", name: "Assignment", icon: <FileText className="h-4 w-4" /> },
+  { id: "quiz", name: "Quiz", icon: <CheckCircle className="h-4 w-4" /> },
+  { id: "exam", name: "Exam", icon: <AlertCircle className="h-4 w-4" /> },
+  { id: "paper", name: "Paper", icon: <PenLine className="h-4 w-4" /> },
+  { id: "problem-set", name: "Problem Set", icon: <FileText className="h-4 w-4" /> },
+  { id: "project", name: "Project", icon: <Bookmark className="h-4 w-4" /> }
+];
+
+// Course categories
+const courseCategories = [
+  { id: "all", name: "All Courses" },
+  { id: "enrolled", name: "Currently Enrolled" },
+  { id: "completed", name: "Completed" },
+  { id: "saved", name: "Saved" }
+];
+
+// Departments
 const departments = [
-  "All Departments",
-  "Computer Science",
-  "Mathematics",
-  "Physics",
-  "Biology",
-  "Chemistry",
-  "English",
-  "History",
-  "Psychology"
+  { id: "cs", name: "Computer Science" },
+  { id: "math", name: "Mathematics" },
+  { id: "phys", name: "Physics" },
+  { id: "eng", name: "English" },
+  { id: "chem", name: "Chemistry" },
+  { id: "bio", name: "Biology" }
 ];
 
-// Terms for filtering
-const terms = [
-  "All Terms",
-  "Fall 2023",
-  "Summer 2023",
-  "Spring 2023",
-  "Fall 2022"
-];
-
-// Course status options
-const courseStatuses = [
-  "All Courses",
-  "Active",
-  "Completed",
-  "Upcoming",
-  "Archived"
-];
-
-export default function Courses() {
-  const [activeView, setActiveView] = useState<"grid" | "list">("grid");
+export default function CoursesPage() {
+  const [activeCategory, setActiveCategory] = useState("enrolled");
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedDepartment, setSelectedDepartment] = useState("All Departments");
-  const [selectedTerm, setSelectedTerm] = useState("All Terms");
-  const [selectedStatus, setSelectedStatus] = useState("All Courses");
-  const [isRegisterDialogOpen, setIsRegisterDialogOpen] = useState(false);
-
-  // Filter courses based on search and filters
+  const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
+  const [selectedCourse, setSelectedCourse] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState("overview");
+  
+  // Filter courses based on active category, search query, and selected departments
   const filteredCourses = coursesData.filter(course => {
-    // Search query filter
-    const matchesSearch = course.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         course.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         course.description.toLowerCase().includes(searchQuery.toLowerCase());
+    // Filter by category
+    if (activeCategory === "enrolled" && course.enrollmentStatus !== "enrolled") return false;
+    if (activeCategory === "completed" && course.enrollmentStatus !== "completed") return false;
     
-    // Department filter
-    const matchesDepartment = selectedDepartment === "All Departments" || 
-                              course.department === selectedDepartment;
+    // Filter by search query
+    if (searchQuery && !course.title.toLowerCase().includes(searchQuery.toLowerCase()) && 
+        !course.code.toLowerCase().includes(searchQuery.toLowerCase())) {
+      return false;
+    }
     
-    // Term filter
-    const matchesTerm = selectedTerm === "All Terms" || 
-                        course.term === selectedTerm;
+    // Filter by department
+    if (selectedDepartments.length > 0 && 
+        !selectedDepartments.includes(course.instructor.department.toLowerCase().replace(/\s+/g, ''))) {
+      return false;
+    }
     
-    // Status filter
-    const matchesStatus = selectedStatus === "All Courses" || 
-                         course.status === selectedStatus.toLowerCase();
-    
-    return matchesSearch && matchesDepartment && matchesTerm && matchesStatus;
+    return true;
   });
-
-  // Function to format date
+  
+  // Get the selected course data
+  const getSelectedCourse = () => {
+    return coursesData.find(course => course.id === selectedCourse);
+  };
+  
+  // Toggle department selection
+  const toggleDepartment = (deptId: string) => {
+    if (selectedDepartments.includes(deptId)) {
+      setSelectedDepartments(selectedDepartments.filter(id => id !== deptId));
+    } else {
+      setSelectedDepartments([...selectedDepartments, deptId]);
+    }
+  };
+  
+  // Format date
   const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
-
-  // Function to get time remaining for assignments and exams
-  const getTimeRemaining = (dateString: string) => {
-    const now = new Date();
-    const dueDate = new Date(dateString);
-    const diffTime = Math.abs(dueDate.getTime() - now.getTime());
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) return "Today";
-    if (diffDays === 1) return "Tomorrow";
-    return `${diffDays} days`;
+  
+  // Format time
+  const formatTime = (dateString: string) => {
+    return new Date(dateString).toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    });
   };
-
-  // Function to get progress color based on value
-  const getProgressColor = (value: number) => {
-    if (value < 30) return "bg-red-500";
-    if (value < 70) return "bg-amber-500";
-    return "bg-green-500";
+  
+  // Get assignment type icon
+  const getAssignmentTypeIcon = (type: string) => {
+    const assignmentType = assignmentTypes.find(t => t.id === type);
+    return assignmentType ? assignmentType.icon : <FileText className="h-4 w-4" />;
   };
 
   return (
@@ -289,364 +322,857 @@ export default function Courses() {
         <div>
           <h1 className="text-3xl font-bold tracking-tight mb-1">Courses</h1>
           <p className="text-muted-foreground">
-            View and manage your enrolled courses
+            Manage your academic courses and assignments
           </p>
         </div>
-        <div className="mt-4 md:mt-0 flex gap-2">
-          <Button variant="outline" onClick={() => setActiveView(activeView === "grid" ? "list" : "grid")}>
-            {activeView === "grid" ? (
-              <FileText className="h-4 w-4 mr-2" />
-            ) : (
-              <BookOpen className="h-4 w-4 mr-2" />
-            )}
-            View as {activeView === "grid" ? "List" : "Grid"}
-          </Button>
-          <Dialog open={isRegisterDialogOpen} onOpenChange={setIsRegisterDialogOpen}>
+        <div className="mt-4 md:mt-0 flex flex-wrap gap-2">
+          <div className="relative">
+            <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input 
+              placeholder="Search courses..." 
+              className="pl-8 w-[200px] md:w-[260px]"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="gap-1">
+                <Filter className="h-4 w-4" />
+                Filter
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[200px]">
+              <DropdownMenuLabel>Filter by Department</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {departments.map(dept => (
+                <DropdownMenuItem 
+                  key={dept.id}
+                  onClick={() => toggleDepartment(dept.id)}
+                  className="flex items-center gap-2"
+                >
+                  <div className="flex h-4 w-4 items-center justify-center rounded-sm border border-primary">
+                    {selectedDepartments.includes(dept.id) && <CheckCircle className="h-3 w-3" />}
+                  </div>
+                  <span>{dept.name}</span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
+          <Dialog>
             <DialogTrigger asChild>
               <Button>
                 <Plus className="h-4 w-4 mr-2" />
-                Register for Courses
+                Add Course
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[625px]">
               <DialogHeader>
-                <DialogTitle>Register for Courses</DialogTitle>
+                <DialogTitle>Add New Course</DialogTitle>
                 <DialogDescription>
-                  Search for available courses and register for the current or upcoming term.
+                  Search for courses to add to your schedule.
                 </DialogDescription>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label htmlFor="term-select" className="text-sm font-medium">Term</label>
-                    <Select defaultValue="Fall 2023">
-                      <SelectTrigger id="term-select">
-                        <SelectValue placeholder="Select Term" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Fall 2023">Fall 2023</SelectItem>
-                        <SelectItem value="Spring 2024">Spring 2024</SelectItem>
-                        <SelectItem value="Summer 2024">Summer 2024</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="department-select" className="text-sm font-medium">Department</label>
-                    <Select defaultValue="All Departments">
-                      <SelectTrigger id="department-select">
-                        <SelectValue placeholder="Select Department" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {departments.map((dept) => (
-                          <SelectItem key={dept} value={dept}>{dept}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+              <div className="py-4">
+                <div className="relative mb-4">
+                  <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                  <Input placeholder="Search course catalog..." className="pl-8" />
                 </div>
-                <div className="space-y-2">
-                  <label htmlFor="course-search" className="text-sm font-medium">Search Courses</label>
-                  <Input id="course-search" placeholder="Search by course title, code, or instructor" />
-                </div>
-                <div className="border rounded-md p-4 h-[200px] overflow-y-auto">
-                  <p className="text-sm text-center text-muted-foreground">
-                    Available courses will appear here based on your search criteria.
-                  </p>
+                
+                <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                  <div className="p-3 border rounded-md hover:bg-muted/50 cursor-pointer">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-medium">CS202: Data Structures & Algorithms</h4>
+                        <p className="text-sm text-muted-foreground">Computer Science Department</p>
+                      </div>
+                      <Badge>4 Credits</Badge>
+                    </div>
+                    <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                      <Users className="h-4 w-4" />
+                      <span>32 enrolled / 40 capacity</span>
+                    </div>
+                  </div>
+                  
+                  <div className="p-3 border rounded-md hover:bg-muted/50 cursor-pointer">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-medium">CS305: Database Systems</h4>
+                        <p className="text-sm text-muted-foreground">Computer Science Department</p>
+                      </div>
+                      <Badge>3 Credits</Badge>
+                    </div>
+                    <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                      <Users className="h-4 w-4" />
+                      <span>28 enrolled / 35 capacity</span>
+                    </div>
+                  </div>
+                  
+                  <div className="p-3 border rounded-md hover:bg-muted/50 cursor-pointer">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-medium">MATH202: Calculus II</h4>
+                        <p className="text-sm text-muted-foreground">Mathematics Department</p>
+                      </div>
+                      <Badge>4 Credits</Badge>
+                    </div>
+                    <div className="mt-2 flex items-center gap-2 text-sm text-muted-foreground">
+                      <Users className="h-4 w-4" />
+                      <span>45 enrolled / 50 capacity</span>
+                    </div>
+                  </div>
                 </div>
               </div>
               <DialogFooter>
-                <Button variant="outline" onClick={() => setIsRegisterDialogOpen(false)}>Cancel</Button>
-                <Button type="submit">Register Selected Courses</Button>
+                <Button variant="outline">Cancel</Button>
+                <Button>Add Selected Courses</Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
         </div>
       </header>
 
-      <div className="mb-8">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <Input
-              placeholder="Search courses by title, code, or description..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
-              prefix={<Search className="w-4 h-4 mr-2 text-muted-foreground" />}
-            />
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <Select 
-              value={selectedDepartment} 
-              onValueChange={setSelectedDepartment}
-            >
-              <SelectTrigger className="min-w-[180px]">
-                <SelectValue placeholder="Department" />
-              </SelectTrigger>
-              <SelectContent>
-                {departments.map((dept) => (
-                  <SelectItem key={dept} value={dept}>{dept}</SelectItem>
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="w-full lg:w-64 space-y-6">
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Categories</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-1 pt-1">
+              {courseCategories.map(category => (
+                <button
+                  key={category.id}
+                  className={`w-full flex items-center gap-2 px-2 py-2 text-sm rounded-md transition-colors ${
+                    activeCategory === category.id 
+                      ? 'bg-muted/40 font-medium' 
+                      : 'hover:bg-muted/20'
+                  }`}
+                  onClick={() => {
+                    setActiveCategory(category.id);
+                    setSelectedCourse(null);
+                  }}
+                >
+                  <span>{category.name}</span>
+                  <Badge variant="outline" className="ml-auto">
+                    {category.id === "all" 
+                      ? coursesData.length 
+                      : category.id === "enrolled" 
+                        ? coursesData.filter(c => c.enrollmentStatus === "enrolled").length
+                        : category.id === "completed"
+                          ? coursesData.filter(c => c.enrollmentStatus === "completed").length
+                          : 0
+                    }
+                  </Badge>
+                </button>
+              ))}
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Upcoming</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 pt-1">
+              {coursesData
+                .filter(course => course.enrollmentStatus === "enrolled")
+                .slice(0, 3)
+                .map(course => (
+                  <div key={course.id} className="space-y-1">
+                    {course.nextAssignment && (
+                      <div className="flex items-start gap-2">
+                        <div className="mt-0.5">
+                          {getAssignmentTypeIcon(course.nextAssignment.type)}
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{course.nextAssignment.title}</p>
+                          <div className="flex items-center text-muted-foreground text-xs">
+                            <Clock className="h-3 w-3 mr-1" />
+                            <span>Due {formatDate(course.nextAssignment.dueDate)}</span>
+                          </div>
+                          <Badge 
+                            variant="outline" 
+                            className="text-xs mt-1"
+                            style={{ borderColor: course.color, color: course.color }}
+                          >
+                            {course.code}
+                          </Badge>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 ))}
-              </SelectContent>
-            </Select>
-            <Select 
-              value={selectedTerm} 
-              onValueChange={setSelectedTerm}
-            >
-              <SelectTrigger className="min-w-[150px]">
-                <SelectValue placeholder="Term" />
-              </SelectTrigger>
-              <SelectContent>
-                {terms.map((term) => (
-                  <SelectItem key={term} value={term}>{term}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select 
-              value={selectedStatus} 
-              onValueChange={setSelectedStatus}
-            >
-              <SelectTrigger className="min-w-[150px]">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                {courseStatuses.map((status) => (
-                  <SelectItem key={status} value={status}>{status}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button variant="outline" size="icon">
-              <Filter className="h-4 w-4" />
-            </Button>
-          </div>
+              
+              {coursesData.filter(course => course.enrollmentStatus === "enrolled").length === 0 && (
+                <div className="text-center py-4">
+                  <Calendar className="mx-auto h-8 w-8 text-muted-foreground" />
+                  <p className="text-muted-foreground mt-2 text-sm">No upcoming assignments</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
-      </div>
-
-      {filteredCourses.length === 0 ? (
-        <div className="text-center py-12">
-          <BookOpen className="mx-auto h-12 w-12 text-muted-foreground" />
-          <h3 className="mt-4 text-lg font-semibold">No courses found</h3>
-          <p className="text-muted-foreground mt-2">Try adjusting your search or filters.</p>
-        </div>
-      ) : (
-        <>
-          {activeView === "grid" ? (
+        
+        <div className="flex-1">
+          {selectedCourse ? (
+            <Card>
+              <CardHeader className="pb-3 flex flex-row items-center justify-between">
+                <div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="mb-2"
+                    onClick={() => setSelectedCourse(null)}
+                  >
+                    <ChevronLeft className="h-4 w-4 mr-1" />
+                    Back to Courses
+                  </Button>
+                  <CardTitle className="text-2xl">{getSelectedCourse()?.title}</CardTitle>
+                  <CardDescription className="flex items-center gap-2 mt-1">
+                    <Badge>{getSelectedCourse()?.code}</Badge>
+                    <span>•</span>
+                    <span>{getSelectedCourse()?.credits} Credits</span>
+                    <span>•</span>
+                    <span>{getSelectedCourse()?.term}</span>
+                  </CardDescription>
+                </div>
+                
+                <div className="flex gap-2">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="icon">
+                        <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem>
+                        <Star className="mr-2 h-4 w-4" />
+                        <span>Add to Favorites</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Bell className="mr-2 h-4 w-4" />
+                        <span>Notification Settings</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Download className="mr-2 h-4 w-4" />
+                        <span>Download Syllabus</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem className="text-red-600">
+                        <AlertCircle className="mr-2 h-4 w-4" />
+                        <span>Drop Course</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </CardHeader>
+              
+              <Tabs defaultValue="overview" className="w-full" onValueChange={setActiveTab}>
+                <div className="px-6">
+                  <TabsList className="grid w-full grid-cols-4">
+                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="assignments">Assignments</TabsTrigger>
+                    <TabsTrigger value="materials">Materials</TabsTrigger>
+                    <TabsTrigger value="grades">Grades</TabsTrigger>
+                  </TabsList>
+                </div>
+                
+                <TabsContent value="overview" className="p-6 pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="md:col-span-2 space-y-6">
+                      <div>
+                        <h3 className="text-lg font-medium mb-2">Course Description</h3>
+                        <p className="text-muted-foreground">{getSelectedCourse()?.description}</p>
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-lg font-medium mb-2">Schedule</h3>
+                        <div className="space-y-2">
+                          {getSelectedCourse()?.schedule.map((session, index) => (
+                            <div key={index} className="flex items-start gap-3 p-3 rounded-md border">
+                              <Calendar className="h-5 w-5 text-muted-foreground mt-0.5" />
+                              <div>
+                                <p className="font-medium">{session.day}</p>
+                                <p className="text-sm text-muted-foreground">{session.startTime} - {session.endTime}</p>
+                                <p className="text-sm text-muted-foreground">{session.location}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h3 className="text-lg font-medium mb-2">Upcoming</h3>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {getSelectedCourse()?.upcomingLecture && (
+                            <div className="p-4 rounded-md border">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Video className="h-5 w-5 text-muted-foreground" />
+                                <h4 className="font-medium">Next Lecture</h4>
+                              </div>
+                              <p className="text-sm">{getSelectedCourse()?.upcomingLecture.title}</p>
+                              <div className="mt-2 text-sm text-muted-foreground">
+                                <div className="flex items-center gap-1">
+                                  <Calendar className="h-4 w-4" />
+                                  <span>{formatDate(getSelectedCourse()?.upcomingLecture.date || "")}</span>
+                                </div>
+                                <div className="flex items-center gap-1 mt-1">
+                                  <Clock className="h-4 w-4" />
+                                  <span>{formatTime(getSelectedCourse()?.upcomingLecture.date || "")}</span>
+                                </div>
+                              </div>
+                              <Button variant="outline" size="sm" className="mt-3 w-full">
+                                <Link href="/virtual-classroom" className="flex items-center gap-1">
+                                  <Video className="h-4 w-4" />
+                                  Join Virtual Classroom
+                                </Link>
+                              </Button>
+                            </div>
+                          )}
+                          
+                          {getSelectedCourse()?.nextAssignment && (
+                            <div className="p-4 rounded-md border">
+                              <div className="flex items-center gap-2 mb-2">
+                                {getAssignmentTypeIcon(getSelectedCourse()?.nextAssignment.type || "")}
+                                <h4 className="font-medium">Next Assignment</h4>
+                              </div>
+                              <p className="text-sm">{getSelectedCourse()?.nextAssignment.title}</p>
+                              <div className="mt-2 text-sm text-muted-foreground flex items-center gap-1">
+                                <Calendar className="h-4 w-4" />
+                                <span>Due {formatDate(getSelectedCourse()?.nextAssignment.dueDate || "")}</span>
+                              </div>
+                              <Button variant="outline" size="sm" className="mt-3 w-full">
+                                View Assignment
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-6">
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">Course Progress</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                              <span>Completion</span>
+                              <span className="font-medium">{getSelectedCourse()?.progress}%</span>
+                            </div>
+                            <Progress value={getSelectedCourse()?.progress} className="h-2" />
+                          </div>
+                          
+                          <div className="mt-4 space-y-1">
+                            <div className="flex justify-between text-sm">
+                              <span>Start Date</span>
+                              <span>{formatDate(getSelectedCourse()?.startDate || "")}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span>End Date</span>
+                              <span>{formatDate(getSelectedCourse()?.endDate || "")}</span>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">Instructor</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex items-center gap-3">
+                            <Avatar className="h-10 w-10">
+                              <AvatarFallback>{getSelectedCourse()?.instructor.name[0]}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="font-medium">{getSelectedCourse()?.instructor.name}</p>
+                              <p className="text-sm text-muted-foreground">{getSelectedCourse()?.instructor.department}</p>
+                            </div>
+                          </div>
+                          <div className="mt-4 flex gap-2">
+                            <Button variant="outline" size="sm" className="flex-1">
+                              <MessageSquare className="h-4 w-4 mr-2" />
+                              Message
+                            </Button>
+                            <Button variant="outline" size="sm" className="flex-1">
+                              <Users className="h-4 w-4 mr-2" />
+                              Office Hours
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                      
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-base">Quick Links</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-2">
+                            <Button variant="outline" size="sm" className="w-full justify-start">
+                              <FileText className="h-4 w-4 mr-2" />
+                              Syllabus
+                            </Button>
+                            <Button variant="outline" size="sm" className="w-full justify-start">
+                              <BookOpen className="h-4 w-4 mr-2" />
+                              Course Materials
+                            </Button>
+                            <Button variant="outline" size="sm" className="w-full justify-start">
+                              <MessageSquare className="h-4 w-4 mr-2" />
+                              Discussion Forum
+                            </Button>
+                            <Button variant="outline" size="sm" className="w-full justify-start">
+                              <BarChart className="h-4 w-4 mr-2" />
+                              Grade Center
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="assignments" className="p-6 pt-4">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-medium">Assignments & Assessments</h3>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          <Filter className="h-4 w-4 mr-2" />
+                          Filter
+                        </Button>
+                        <Button size="sm">
+                          <Plus className="h-4 w-4 mr-2" />
+                          Submit Assignment
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <div className="p-4 rounded-md border">
+                        <div className="flex items-start justify-between">
+                          <div className="flex gap-3">
+                            {getAssignmentTypeIcon("assignment")}
+                            <div>
+                              <h4 className="font-medium">Neural Network Architectures Assignment</h4>
+                              <p className="text-sm text-muted-foreground mt-1">
+                                Implement and compare different neural network architectures for image classification.
+                              </p>
+                            </div>
+                          </div>
+                          <Badge variant="outline">20 points</Badge>
+                        </div>
+                        
+                        <div className="mt-4 flex items-center justify-between">
+                          <div className="flex items-center gap-4 text-sm">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="h-4 w-4 text-muted-foreground" />
+                              <span>Due Oct 20, 2023</span>
+                            </div>
+                            <Badge variant="outline" className="bg-yellow-500/10 text-yellow-500">
+                              Pending
+                            </Badge>
+                          </div>
+                          
+                          <Button size="sm">
+                            <Upload className="h-4 w-4 mr-2" />
+                            Submit
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div className="p-4 rounded-md border">
+                        <div className="flex items-start justify-between">
+                          <div className="flex gap-3">
+                            {getAssignmentTypeIcon("quiz")}
+                            <div>
+                              <h4 className="font-medium">Midterm Review Quiz</h4>
+                              <p className="text-sm text-muted-foreground mt-1">
+                                Practice quiz covering all topics from the first half of the semester.
+                              </p>
+                            </div>
+                          </div>
+                          <Badge variant="outline">10 points</Badge>
+                        </div>
+                        
+                        <div className="mt-4 flex items-center justify-between">
+                          <div className="flex items-center gap-4 text-sm">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="h-4 w-4 text-muted-foreground" />
+                              <span>Due Oct 15, 2023</span>
+                            </div>
+                            <Badge variant="outline" className="bg-green-500/10 text-green-500">
+                              Completed
+                            </Badge>
+                          </div>
+                          
+                          <Button variant="outline" size="sm">
+                            <ExternalLink className="h-4 w-4 mr-2" />
+                            View Results
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div className="p-4 rounded-md border">
+                        <div className="flex items-start justify-between">
+                          <div className="flex gap-3">
+                            {getAssignmentTypeIcon("exam")}
+                            <div>
+                              <h4 className="font-medium">Midterm Examination</h4>
+                              <p className="text-sm text-muted-foreground mt-1">
+                                Comprehensive examination covering all material from weeks 1-7.
+                              </p>
+                            </div>
+                          </div>
+                          <Badge variant="outline">100 points</Badge>
+                        </div>
+                        
+                        <div className="mt-4 flex items-center justify-between">
+                          <div className="flex items-center gap-4 text-sm">
+                            <div className="flex items-center gap-1">
+                              <Calendar className="h-4 w-4 text-muted-foreground" />
+                              <span>Oct 30, 2023</span>
+                            </div>
+                            <Badge variant="outline" className="bg-blue-500/10 text-blue-500">
+                              Upcoming
+                            </Badge>
+                          </div>
+                          
+                          <Button variant="outline" size="sm">
+                            <FileText className="h-4 w-4 mr-2" />
+                            Study Guide
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="materials" className="p-6 pt-4">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-medium">Course Materials</h3>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm">
+                          <Filter className="h-4 w-4 mr-2" />
+                          Filter
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="text-sm font-medium mb-2">Week 7: Neural Network Architectures</h4>
+                        <div className="space-y-2">
+                          <div className="p-3 rounded-md border flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <FileText className="h-5 w-5 text-muted-foreground" />
+                              <div>
+                                <p className="font-medium">Lecture Slides: CNN Architectures</p>
+                                <p className="text-xs text-muted-foreground">PDF • 2.4 MB • Uploaded Oct 10, 2023</p>
+                              </div>
+                            </div>
+                            <Button variant="outline" size="sm">
+                              <Download className="h-4 w-4 mr-2" />
+                              Download
+                            </Button>
+                          </div>
+                          
+                          <div className="p-3 rounded-md border flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <Video className="h-5 w-5 text-muted-foreground" />
+                              <div>
+                                <p className="font-medium">Lecture Recording: CNN Architectures</p>
+                                <p className="text-xs text-muted-foreground">MP4 • 1.2 GB • Recorded Oct 10, 2023</p>
+                              </div>
+                            </div>
+                            <Button variant="outline" size="sm">
+                              <ExternalLink className="h-4 w-4 mr-2" />
+                              View
+                            </Button>
+                          </div>
+                          
+                          <div className="p-3 rounded-md border flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <FileText className="h-5 w-5 text-muted-foreground" />
+                              <div>
+                                <p className="font-medium">Supplementary Reading: CNN Paper Collection</p>
+                                <p className="text-xs text-muted-foreground">PDF • 5.7 MB • Uploaded Oct 11, 2023</p>
+                              </div>
+                            </div>
+                            <Button variant="outline" size="sm">
+                              <Download className="h-4 w-4 mr-2" />
+                              Download
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h4 className="text-sm font-medium mb-2">Week 6: Backpropagation & Optimization</h4>
+                        <div className="space-y-2">
+                          <div className="p-3 rounded-md border flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <FileText className="h-5 w-5 text-muted-foreground" />
+                              <div>
+                                <p className="font-medium">Lecture Slides: Optimization Techniques</p>
+                                <p className="text-xs text-muted-foreground">PDF • 1.8 MB • Uploaded Oct 3, 2023</p>
+                              </div>
+                            </div>
+                            <Button variant="outline" size="sm">
+                              <Download className="h-4 w-4 mr-2" />
+                              Download
+                            </Button>
+                          </div>
+                          
+                          <div className="p-3 rounded-md border flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                              <Video className="h-5 w-5 text-muted-foreground" />
+                              <div>
+                                <p className="font-medium">Lecture Recording: Optimization Techniques</p>
+                                <p className="text-xs text-muted-foreground">MP4 • 980 MB • Recorded Oct 3, 2023</p>
+                              </div>
+                            </div>
+                            <Button variant="outline" size="sm">
+                              <ExternalLink className="h-4 w-4 mr-2" />
+                              View
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="grades" className="p-6 pt-4">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-medium">Grade Summary</h3>
+                      <Button variant="outline" size="sm">
+                        <Download className="h-4 w-4 mr-2" />
+                        Export Grades
+                      </Button>
+                    </div>
+                    
+                    <Card>
+                      <CardContent className="p-6">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                          <div className="space-y-1">
+                            <p className="text-sm text-muted-foreground">Current Grade</p>
+                            <div className="text-3xl font-bold">92.5%</div>
+                            <Badge className="bg-green-500/10 text-green-500">A</Badge>
+                          </div>
+                          
+                          <div className="w-full md:w-2/3">
+                            <div className="space-y-4">
+                              <div className="space-y-2">
+                                <div className="flex justify-between text-sm">
+                                  <span>Assignments (40%)</span>
+                                  <span className="font-medium">95%</span>
+                                </div>
+                                <Progress value={95} className="h-2" />
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <div className="flex justify-between text-sm">
+                                  <span>Quizzes (20%)</span>
+                                  <span className="font-medium">88%</span>
+                                </div>
+                                <Progress value={88} className="h-2" />
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <div className="flex justify-between text-sm">
+                                  <span>Midterm (20%)</span>
+                                  <span className="font-medium">Upcoming</span>
+                                </div>
+                                <Progress value={0} className="h-2" />
+                              </div>
+                              
+                              <div className="space-y-2">
+                                <div className="flex justify-between text-sm">
+                                  <span>Final Project (20%)</span>
+                                  <span className="font-medium">Upcoming</span>
+                                </div>
+                                <Progress value={0} className="h-2" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    
+                    <div className="space-y-2">
+                      <h4 className="text-sm font-medium">Grade Details</h4>
+                      
+                      <div className="rounded-md border">
+                        <div className="p-3 border-b flex items-center justify-between font-medium">
+                          <div className="flex items-center gap-2">
+                            <span>Assignment</span>
+                          </div>
+                          <div className="flex items-center gap-8">
+                            <span>Due Date</span>
+                            <span>Score</span>
+                            <span>Grade</span>
+                          </div>
+                        </div>
+                        
+                        <div className="divide-y">
+                          <div className="p-3 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <FileText className="h-4 w-4 text-muted-foreground" />
+                              <span>Python Basics Quiz</span>
+                            </div>
+                            <div className="flex items-center gap-8">
+                              <span className="text-sm text-muted-foreground w-24">Sep 15, 2023</span>
+                              <span className="text-sm w-16">9/10</span>
+                              <Badge className="bg-green-500/10 text-green-500">90%</Badge>
+                            </div>
+                          </div>
+                          
+                          <div className="p-3 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <FileText className="h-4 w-4 text-muted-foreground" />
+                              <span>Data Preprocessing Assignment</span>
+                            </div>
+                            <div className="flex items-center gap-8">
+                              <span className="text-sm text-muted-foreground w-24">Sep 22, 2023</span>
+                              <span className="text-sm w-16">19/20</span>
+                              <Badge className="bg-green-500/10 text-green-500">95%</Badge>
+                            </div>
+                          </div>
+                          
+                          <div className="p-3 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <FileText className="h-4 w-4 text-muted-foreground" />
+                              <span>Midterm Review Quiz</span>
+                            </div>
+                            <div className="flex items-center gap-8">
+                              <span className="text-sm text-muted-foreground w-24">Oct 15, 2023</span>
+                              <span className="text-sm w-16">8.5/10</span>
+                              <Badge className="bg-green-500/10 text-green-500">85%</Badge>
+                            </div>
+                          </div>
+                          
+                          <div className="p-3 flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <FileText className="h-4 w-4 text-muted-foreground" />
+                              <span>Neural Network Architectures Assignment</span>
+                            </div>
+                            <div className="flex items-center gap-8">
+                              <span className="text-sm text-muted-foreground w-24">Oct 20, 2023</span>
+                              <span className="text-sm w-16">-/20</span>
+                              <Badge variant="outline">Pending</Badge>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </Card>
+          ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredCourses.map((course) => (
+              {filteredCourses.map(course => (
                 <motion.div
                   key={course.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <Card className="overflow-hidden h-full hover:shadow-md transition-shadow">
-                    <CardHeader className="p-0">
-                      <div className="relative h-36 bg-gradient-to-r from-blue-600 to-indigo-600">
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <BookOpen className="h-16 w-16 text-white opacity-25" />
+                  <Card className="h-full flex flex-col overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => setSelectedCourse(course.id)}
+                  >
+                    <div className="h-2" style={{ backgroundColor: course.color }}></div>
+                    <CardHeader className="pb-2">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <CardTitle>{course.title}</CardTitle>
+                          <CardDescription className="mt-1">{course.code}</CardDescription>
                         </div>
-                        <div className="absolute top-4 right-4 flex space-x-2">
-                          <Button variant="ghost" size="icon" className="rounded-full bg-white/20 text-white hover:bg-white/30">
-                            <Bookmark className="h-4 w-4" />
-                          </Button>
-                          <Button variant="ghost" size="icon" className="rounded-full bg-white/20 text-white hover:bg-white/30">
-                            <Star className="h-4 w-4" />
-                          </Button>
-                        </div>
-                        <div className="absolute bottom-4 left-4">
-                          <Badge variant="secondary" className="bg-white/20 text-white hover:bg-white/30">
-                            {course.code}
-                          </Badge>
-                        </div>
+                        <Badge variant={course.enrollmentStatus === "completed" ? "outline" : "default"}>
+                          {course.enrollmentStatus === "enrolled" ? "Current" : "Completed"}
+                        </Badge>
                       </div>
                     </CardHeader>
-                    <CardContent className="p-6">
-                      <div className="space-y-2 mb-4">
-                        <div className="flex justify-between items-start">
-                          <h3 className="font-bold text-lg line-clamp-2">{course.title}</h3>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem>
-                                <BookOpen className="h-4 w-4 mr-2" />
-                                View Course
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <Calendar className="h-4 w-4 mr-2" />
-                                View Schedule
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <FileText className="h-4 w-4 mr-2" />
-                                Assignments
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem>
-                                <Users className="h-4 w-4 mr-2" />
-                                Classmates
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Tag className="h-3.5 w-3.5" />
-                          {course.department}
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Calendar className="h-3.5 w-3.5" />
-                          {course.term}
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-3 mb-4">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage src={course.instructor.avatar} alt={course.instructor.name} />
-                          <AvatarFallback>{course.instructor.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-medium">{course.instructor.name}</p>
-                          <p className="text-xs text-muted-foreground">{course.instructor.department}</p>
-                        </div>
+                    <CardContent className="flex-1">
+                      <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                        <Calendar className="h-4 w-4" />
+                        <span>{course.term}</span>
+                        <span>•</span>
+                        <span>{course.credits} Credits</span>
                       </div>
                       
                       <div className="space-y-4">
-                        <div>
-                          <div className="flex justify-between items-center mb-1">
-                            <span className="text-sm font-medium">Course Progress</span>
-                            <span className="text-sm font-medium">{course.progress}%</span>
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-8 w-8">
+                            <AvatarFallback>{course.instructor.name[0]}</AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="text-sm font-medium">{course.instructor.name}</p>
+                            <p className="text-xs text-muted-foreground">{course.instructor.department}</p>
                           </div>
-                          <Progress value={course.progress} className={getProgressColor(course.progress)} />
                         </div>
-
-                        {course.nextAssignment && (
-                          <div className="border rounded-md p-3 bg-muted/30">
-                            <div className="flex items-center justify-between mb-1">
-                              <h4 className="text-sm font-medium flex items-center">
-                                <FileText className="h-3.5 w-3.5 mr-1" />
-                                Next Assignment
-                              </h4>
-                              <Badge variant="outline" className="text-xs">
-                                Due in {getTimeRemaining(course.nextAssignment.dueDate)}
-                              </Badge>
+                        
+                        {course.enrollmentStatus === "enrolled" && (
+                          <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                              <span>Progress</span>
+                              <span>{course.progress}%</span>
                             </div>
-                            <p className="text-sm line-clamp-1">{course.nextAssignment.title}</p>
+                            <Progress value={course.progress} className="h-1.5" />
+                          </div>
+                        )}
+                        
+                        {course.enrollmentStatus === "completed" && course.grade && (
+                          <div className="flex items-center gap-2">
+                            <Badge className="bg-green-500/10 text-green-500">
+                              Final Grade: {course.grade}
+                            </Badge>
                           </div>
                         )}
                       </div>
                     </CardContent>
-                    <CardFooter className="p-6 pt-0 flex justify-between">
-                      <div className="flex gap-1">
-                        {course.tags.slice(0, 2).map((tag, index) => (
-                          <Badge key={index} variant="secondary" className="text-xs">
-                            {tag}
-                          </Badge>
-                        ))}
-                        {course.tags.length > 2 && (
-                          <Badge variant="secondary" className="text-xs">
-                            +{course.tags.length - 2}
-                          </Badge>
-                        )}
-                      </div>
-                      <Button variant="outline" size="sm" asChild>
-                        <Link href={`/course/${course.id}`}>
-                          Go to Course
-                          <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
-                        </Link>
-                      </Button>
+                    <CardFooter className="border-t pt-4">
+                      {course.enrollmentStatus === "enrolled" && course.nextAssignment && (
+                        <div className="w-full">
+                          <p className="text-xs text-muted-foreground mb-1">Next Assignment</p>
+                          <div className="flex items-center justify-between">
+                            <p className="text-sm truncate">{course.nextAssignment.title}</p>
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                              <Calendar className="h-3 w-3" />
+                              <span>{new Date(course.nextAssignment.dueDate).toLocaleDateString()}</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      
+                      {course.enrollmentStatus === "completed" && (
+                        <Button variant="outline" size="sm" className="w-full">
+                          <FileText className="h-4 w-4 mr-2" />
+                          View Course Records
+                        </Button>
+                      )}
                     </CardFooter>
                   </Card>
                 </motion.div>
               ))}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {filteredCourses.map((course) => (
-                <motion.div
-                  key={course.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Card>
-                    <CardContent className="p-0">
-                      <div className="flex flex-col md:flex-row md:items-center p-4 md:p-6">
-                        <div className="flex items-center gap-4 flex-1">
-                          <div className="rounded-md flex items-center justify-center h-14 w-14 bg-gradient-to-r from-blue-600 to-indigo-600 text-white shrink-0">
-                            <BookOpen className="h-7 w-7" />
-                          </div>
-                          <div className="space-y-1 flex-1 min-w-0">
-                            <div className="flex items-center gap-2">
-                              <Badge variant="outline">{course.code}</Badge>
-                              <Badge variant="secondary" className="text-xs">
-                                {course.creditHours} Credits
-                              </Badge>
-                            </div>
-                            <h3 className="font-semibold text-base md:text-lg truncate">{course.title}</h3>
-                            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
-                              <div className="flex items-center gap-1">
-                                <Calendar className="h-3.5 w-3.5" />
-                                <span>{course.term}</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <Tag className="h-3.5 w-3.5" />
-                                <span>{course.department}</span>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="mt-4 md:mt-0 md:ml-4 flex flex-col md:flex-row md:items-center gap-3">
-                          <div className="w-full md:w-40">
-                            <div className="flex justify-between items-center mb-1">
-                              <span className="text-xs font-medium">Progress</span>
-                              <span className="text-xs font-medium">{course.progress}%</span>
-                            </div>
-                            <Progress value={course.progress} className={getProgressColor(course.progress)} />
-                          </div>
-                          <Button variant="outline" size="sm" className="w-full md:w-auto" asChild>
-                            <Link href={`/course/${course.id}`}>
-                              View Course
-                              <ChevronRight className="ml-1 h-3.5 w-3.5" />
-                            </Link>
-                          </Button>
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="h-8 w-8">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem>
-                                <BookOpen className="h-4 w-4 mr-2" />
-                                View Syllabus
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <FileText className="h-4 w-4 mr-2" />
-                                Assignments
-                              </DropdownMenuItem>
-                              <DropdownMenuItem>
-                                <GraduationCap className="h-4 w-4 mr-2" />
-                                Grades
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem>
-                                <Bookmark className="h-4 w-4 mr-2" />
-                                Save Course
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
+              
+              {filteredCourses.length === 0 && (
+                <div className="col-span-full flex flex-col items-center justify-center text-center p-12">
+                  <BookOpen className="h-12 w-12 text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-medium mb-2">No courses found</h3>
+                  <p className="text-muted-foreground mb-4">Try adjusting your filters or search criteria.</p>
+                  <Button>Browse Course Catalog</Button>
+                </div>
+              )}
             </div>
           )}
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
-} 
+}
