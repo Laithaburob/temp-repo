@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:force": "cross-env NEXT_SKIP_TYPESCRIPT_AND_ESLINT_CHECKS=true next build",
     "start": "next start",
     "start:prod": "next build && next start",
     "lint": "next lint",
