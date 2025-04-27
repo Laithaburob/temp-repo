@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { RefObject } from "react";
@@ -325,5 +326,3 @@ export const MessageDetail = ({
     </div>
   );
 };
-
-

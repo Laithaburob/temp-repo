@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useRef, useEffect } from "react";
@@ -297,7 +296,7 @@ export default function Messages() {
   const [composeDueDate, setComposeDueDate] = useState("");
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [newComment, setNewComment] = useState("");
-  const contentRef = useRef<HTMLDivElement>(null!);
+  const contentRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
 
   const handleMarkAsRead = (commId: string) => {
     setCommunications(communications.map(comm => 
