@@ -3,10 +3,9 @@ import { useState } from "react";
 import { Communication } from "@/types/messages";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Search, Star, Bookmark, MessageSquare, Paperclip } from "lucide-react";
+import { Search, Star, Bookmark, MessageSquare, Paperclip, Calendar } from "lucide-react";
 import { useMessageFormatting } from "@/hooks/useMessageFormatting";
 import { useCommunicationStyles } from "@/hooks/useCommunicationStyles";
-import { Calendar } from "lucide-react";
 
 interface MessageListProps {
   communications: Communication[];

@@ -1,13 +1,15 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { UserProfile, Communication } from "@/types/messages";
+import { UserProfile, Communication, Attachment } from "@/types/messages";
 import { MessageSidebar } from "@/components/messages/MessageSidebar";
 import { MessageList } from "@/components/messages/MessageList";
 import { MessageDetail } from "@/components/messages/MessageDetail";
 import { ComposeDialog } from "@/components/messages/ComposeDialog";
 import { useMessageFormatting } from "@/hooks/useMessageFormatting";
 import { useCommunicationStyles } from "@/hooks/useCommunicationStyles";
+import Link from "next/link";
 import { 
   ArrowLeft,
   Send,
