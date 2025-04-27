@@ -1,5 +1,7 @@
 
+import React from "react";
 import { FileText, Bell, Users, MessageSquare, BookOpen } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 
 export const useCommunicationStyles = () => {
   const getCommunicationTypeIcon = (type?: string) => {

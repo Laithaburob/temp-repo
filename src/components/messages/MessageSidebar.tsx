@@ -2,7 +2,7 @@
 import { UserProfile } from "@/types/messages";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { MessageSquare, Home, Inbox, Calendar, Search, Settings, BookOpen } from "lucide-react";
+import { MessageSquare, BookOpen, Plus, Bell, Users, Star, FileText } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface MessageSidebarProps {
@@ -24,7 +24,7 @@ export const MessageSidebar = ({
 }: MessageSidebarProps) => {
   const communicationTypes = [
     { id: "all", name: "All", icon: <MessageSquare className="h-4 w-4" /> },
-    { id: "assignment", name: "Assignments", icon: <Home className="h-4 w-4" /> },
+    { id: "assignment", name: "Assignments", icon: <FileText className="h-4 w-4" /> },
     { id: "announcement", name: "Announcements", icon: <Bell className="h-4 w-4" /> },
     { id: "discussion", name: "Discussions", icon: <Users className="h-4 w-4" /> },
     { id: "message", name: "Messages", icon: <MessageSquare className="h-4 w-4" /> },
