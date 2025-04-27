@@ -297,7 +297,7 @@ export default function Messages() {
   const [composeDueDate, setComposeDueDate] = useState("");
   const [attachments, setAttachments] = useState<Attachment[]>([]);
   const [newComment, setNewComment] = useState("");
-  const contentRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null!);
 
   const handleMarkAsRead = (commId: string) => {
     setCommunications(communications.map(comm => 
