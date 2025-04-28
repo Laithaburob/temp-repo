@@ -3,10 +3,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
-export default defineConfig(({ mode }) => ({
-  plugins: [
-    react(),
-  ],
+export default defineConfig({
+  plugins: [react()],
   server: {
     port: 8080,
     host: '::'
@@ -16,4 +14,9 @@ export default defineConfig(({ mode }) => ({
       '@': path.resolve(__dirname, './src'),
     },
   },
-}))
+  build: {
+    outDir: 'dist',
+    minify: true,
+    sourcemap: true,
+  }
+})
