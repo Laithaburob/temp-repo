@@ -5,6 +5,7 @@ import "./globals.css";
 
 const geist = Geist({
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -19,7 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={`min-h-screen antialiased bg-background ${geist.variable}`}>
+      <body className={`min-h-screen antialiased bg-background ${geist.className}`}>
         {children}
       </body>
     </html>
